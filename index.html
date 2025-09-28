@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
@@ -57,135 +57,94 @@
             </div>
         </div>
 
-        <!-- Slide 2: Background & Objective -->
+        <!-- Slide 2: Executive Summary -->
         <div class="slide flex-col justify-center p-12 bg-white" data-slide="2">
-            <h2 class="text-4xl font-bold text-blue-800 mb-8 border-l-4 border-blue-500 pl-4 fade-in-up">背景與目標</h2>
-            <div class="space-y-6 text-lg">
-                <div class="flex items-start fade-in-up delay-100">
-                    <svg class="w-8 h-8 text-blue-500 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-                    <div>
-                        <h3 class="font-bold text-xl text-gray-800">專案起因</h3>
-                        <p class="text-gray-600">為提升廠內自動化倉儲系統的整體運作產能。</p>
-                    </div>
-                </div>
-                <div class="flex items-start fade-in-up delay-200">
-                    <svg class="w-8 h-8 text-blue-500 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
-                    <div>
-                        <h3 class="font-bold text-xl text-gray-800">初始目標</h3>
-                        <p class="text-gray-600">解決儲運箱高速移動設備 (Crane) 的過度震盪問題。</p>
-                    </div>
-                </div>
-                <div class="flex items-start fade-in-up delay-300">
-                     <svg class="w-8 h-8 text-blue-500 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    <div>
-                        <h3 class="font-bold text-xl text-gray-800">意識轉變</h3>
-                        <p class="text-gray-600">初步研究發現，單純透過參數壓制效能來換取穩定性，並非最佳解方，可能掩蓋了更深層的系統性問題。</p>
-                    </div>
-                </div>
+            <h2 class="text-4xl font-bold text-blue-800 mb-6 border-l-4 border-blue-500 pl-4 fade-in-up">摘要 (Executive Summary)</h2>
+            <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+                <p class="fade-in-up delay-100">本報告源於提升冷鏈倉儲產能的專案，初期聚焦於解決 Crane 震盪問題，後續深入探查發現根源為「<strong class="text-red-600">加速性系統老化</strong>」。</p>
+                <p class="fade-in-up delay-200">調查克服 PLC 程式碼鎖定的限制，透過跨領域分析，識別出因低溫環境導致馬達<strong class="text-blue-600">軸承潤滑油晶化</strong>、損耗加劇，並觸發大量物理警報。</p>
+                <p class="fade-in-up delay-300">為避免潛在風險被擱置，本報告建議將所有分析與數據直接提交至**風險控制部門**，以啟動正式評估與應對程序，預防災難性故障發生。</p>
             </div>
         </div>
-        
-        <!-- Slide 3: Discovery & Challenge -->
+
+        <!-- Slide 3: Project Background & Problem Definition -->
         <div class="slide flex-col justify-center p-12 bg-gray-50" data-slide="3">
-            <div class="w-full lg:w-2/3">
-                <h2 class="text-4xl font-bold text-indigo-800 mb-8 border-l-4 border-indigo-500 pl-4 fade-in-up">發現與挑戰</h2>
-                <div class="space-y-6 text-lg">
-                    <div class="fade-in-up delay-100 bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl text-gray-800">核心挑戰</h3>
-                        <p class="text-gray-600">設備商將 PLC 核心程式碼鎖定，無法進行直接的程式碼分析與優化。</p>
-                    </div>
-                    <div class="fade-in-up delay-200 bg-white p-6 rounded-lg shadow">
-                        <h3 class="font-bold text-xl text-gray-800">初步發現</h3>
-                        <p class="text-gray-600">系統採用兩組內建複雜運動曲線 (S-Curve) 的高性能變頻器，顯示設計之初已將 <strong class="text-indigo-600">抗震穩定性</strong> 作為最高優先級。</p>
-                    </div>
-                </div>
+            <h2 class="text-4xl font-bold text-indigo-800 mb-6 border-l-4 border-indigo-500 pl-4 fade-in-up">專案背景與問題定義</h2>
+            <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+                <p class="fade-in-up delay-100"><strong>初始目標：</strong>提升廠內自動化倉儲系統的整體運作產能，調查起點為儲運箱在高速移動下的過度震盪問題。</p>
+                <p class="fade-in-up delay-200"><strong>意識轉變：</strong>單純降速換取穩定性治標不治本，且與總目標背道而馳，更可能掩蓋深層的結構性問題。</p>
+                <p class="fade-in-up delay-300"><strong>目標升級：</strong>專案目標由「解決單點震盪」升級為「<strong class="text-indigo-700">探查並診斷影響系統長期穩定性與產能的根本原因</strong>」。</p>
             </div>
         </div>
-
-        <!-- Slide 4: Analysis & Methodology -->
+        
+        <!-- Slide 4: Investigation Process & Methodology Part 1 -->
         <div class="slide flex-col justify-center p-12 bg-white" data-slide="4">
-            <h2 class="text-4xl font-bold text-teal-800 mb-8 border-l-4 border-teal-500 pl-4 fade-in-up">分析與方法</h2>
-            <div class="grid md:grid-cols-2 gap-8 text-lg">
-                <div class="bg-teal-50 p-6 rounded-lg shadow-sm fade-in-up delay-100">
-                    <h3 class="font-bold text-xl text-teal-700 mb-2">逆向工程與類比分析</h3>
-                    <p class="text-gray-600">透過逆向思維推斷 S 曲線的應用邏輯，並將運動波形與「<strong class="text-teal-600">音樂節拍</strong>」類比，成功驗證其抑制震盪的作用。</p>
+            <h2 class="text-4xl font-bold text-teal-800 mb-6 border-l-4 border-teal-500 pl-4 fade-in-up">調查過程與分析方法 (1/2)</h2>
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm fade-in-up delay-100">
+                    <h3 class="font-bold text-xl text-teal-700 mb-2">3.1 系統設計邏輯的逆向分析</h3>
+                    <p class="text-gray-600">觀察配電盤發現，系統採用兩組內建複雜運動曲線 (S-Curve) 的高性能變頻器，顯示設計之初已將「<strong class="text-teal-600">抗震穩定性</strong>」作為最高優先級。此發現讓我們確信問題並非程式的先天缺陷。</p>
                 </div>
-                <div class="bg-orange-50 p-6 rounded-lg shadow-sm fade-in-up delay-200">
-                    <h3 class="font-bold text-xl text-orange-700 mb-2">矛盾點與調查轉向</h3>
-                    <p class="text-gray-600">「短距離降速優化」方案與提升產能總目標矛盾，使調查方向從「程式優化」轉向「<strong class="text-orange-600">機械老化</strong>」。</p>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm fade-in-up delay-200">
+                    <h3 class="font-bold text-xl text-orange-700 mb-2">3.2 調查轉向：從「程式優化」到「機械老化」</h3>
+                    <p class="text-gray-600">「短距離降速優化」方案與提升產能的總目標產生根本性矛盾。這個矛盾點成為關鍵轉捩點，促使我們將調查方向從「程式碼」轉向可觀察與驗證的「<strong class="text-orange-600">機械結構與物理老化</strong>」。</p>
                 </div>
             </div>
         </div>
         
-        <!-- Slide 5: Cross-Domain Investigation -->
-        <div class="slide flex-col justify-center p-12 bg-gray-50" data-slide="5">
-            <h2 class="text-4xl font-bold text-purple-800 mb-8 border-l-4 border-purple-500 pl-4 fade-in-up">跨領域整合調查</h2>
-            <div class="space-y-6 text-lg">
-                 <div class="flex items-start bg-white p-6 rounded-lg shadow-md fade-in-up delay-100">
-                    <svg class="w-10 h-10 text-purple-500 mr-5 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <div>
-                        <h3 class="font-bold text-xl text-gray-800">物理觀察</h3>
-                        <p class="text-gray-600">將視角擴大至整體鋼構，發現結構在設備高速運行下有 <strong class="text-purple-600">顯著搖晃</strong>。</p>
-                    </div>
-                </div>
-                <div class="flex items-start bg-white p-6 rounded-lg shadow-md fade-in-up delay-200">
-                    <svg class="w-10 h-10 text-purple-500 mr-5 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <div>
-                        <h3 class="font-bold text-xl text-gray-800">數據挖掘與交叉比對 (三週數據)</h3>
-                        <ul class="list-disc list-inside text-gray-600 mt-2">
-                            <li><strong class="text-gray-700">證實 1：</strong>為安全考量，系統避免了三台設備同時全速運行。</li>
-                            <li><strong class="text-gray-700">證實 2：</strong>意外發現三台設備 <strong class="text-purple-600">作業量嚴重不均</strong>，揭示了 WMS 儲位規劃的潛在效率問題。</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 6: Key Breakthrough -->
-        <div class="slide flex-col lg:flex-row items-center p-12 bg-white" data-slide="6">
+        <!-- Slide 5: Investigation Process & Methodology Part 2 -->
+        <div class="slide flex-col lg:flex-row items-center p-12 bg-white" data-slide="5">
             <div class="w-full lg:w-1/2 pr-8">
-                <h2 class="text-4xl font-bold text-red-800 mb-6 border-l-4 border-red-500 pl-4 fade-in-up">關鍵突破：數據證據</h2>
+                <h2 class="text-4xl font-bold text-purple-800 mb-6 border-l-4 border-purple-500 pl-4 fade-in-up">調查過程與分析方法 (2/2)</h2>
                 <div class="space-y-4">
-                    <p class="text-lg text-gray-700 fade-in-up delay-100">在 WCS 系統中，發現可依設備讀取獨立的 PLC 警報紀錄。</p>
-                    <div class="bg-red-50 border border-red-200 p-4 rounded-lg fade-in-up delay-200">
-                        <h3 class="font-bold text-xl text-red-700 mb-2">致命的物理性警報：</h3>
-                        <ul class="list-disc list-inside text-red-900 space-y-1">
-                            <li>動作未達定位值</li>
-                            <li>昇降纜線斷裂偵測</li>
-                            <li>變頻器故障</li>
-                            <li class="font-bold">伺服馬達異常</li>
+                     <div class="fade-in-up delay-100">
+                        <h3 class="font-bold text-xl text-purple-700">3.3 跨領域整合調查</h3>
+                        <ul class="list-disc list-inside text-gray-600 mt-2 space-y-2">
+                            <li><strong>物理觀察：</strong>擴大視角至整體鋼構，發現設備高速運行下有顯著搖晃。</li>
+                            <li><strong>歷史數據挖掘：</strong>分析三週數據，證實系統為安全考量已降速運行，且三台設備作業量嚴重不均。</li>
+                            <li><strong>關鍵突破 (PLC警報)：</strong>在WCS中發現大量致命物理警報，如「動作未達定位值」，及最關鍵的「<strong class="text-red-600">伺服馬達異常</strong>」。</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="w-full lg:w-1/2 mt-8 lg:mt-0 grid grid-cols-1 gap-4 fade-in-up delay-300">
-                <img src="alarm-record.png" alt="警報紀錄" class="rounded-lg shadow-lg w-full h-auto object-cover">
-                <img src="internal-email.png" alt="內部溝通郵件" class="rounded-lg shadow-lg w-full h-auto object-cover">
+                <img src="alarm-record.png" alt="alarm-record.png" class="rounded-lg shadow-lg w-full h-auto object-cover">
+                <img src="internal-email.png" alt="internal-email.png" class="rounded-lg shadow-lg w-full h-auto object-cover">
             </div>
         </div>
 
-        <!-- Slide 7: Conclusion & Recommendation -->
+        <!-- Slide 6: Core Findings & Root Cause Analysis -->
+        <div class="slide flex-col justify-center p-12 bg-gray-50" data-slide="6">
+            <h2 class="text-4xl font-bold text-red-800 mb-6 border-l-4 border-red-500 pl-4 fade-in-up">核心發現與根本原因分析</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md fade-in-up delay-100">
+                    <h3 class="font-bold text-xl text-blue-700 mb-2">4.1 技術層面 (冰山之上)</h3>
+                    <p class="text-gray-600">伺服馬達是核心，軸承是心臟。在冷鏈低溫環境下，軸承內的<strong class="text-blue-600">潤滑油會結冰晶化</strong>，失去潤滑功能，導致磨損是正常環境下的數倍。這完美解釋了「伺服馬達異常」警報頻繁出現的原因。</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md fade-in-up delay-200">
+                    <h3 class="font-bold text-xl text-gray-700 mb-2">4.2 組織性層面 (冰山之下)</h3>
+                    <p class="text-gray-600">系統的<strong class="text-gray-800">設計壽命預期</strong>，未充分考慮冷鏈環境對關鍵零件的加速老化效應。現行的<strong class="text-gray-800">維護保養計畫</strong>與備品庫存仍基於標準模型，未能對應實際的高損耗率，形成了管理上的缺口。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Conclusion & Strategic Recommendation -->
         <div class="slide flex-col lg:flex-row items-center justify-center p-12 bg-gradient-to-br from-blue-50 to-indigo-100 gap-8" data-slide="7">
             <div class="w-full lg:w-1/2">
-                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center lg:text-left fade-in-up">結論與建議</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center lg:text-left fade-in-up">結論與策略性建議</h2>
                 <div class="w-full max-w-3xl space-y-6">
                     <div class="glassmorphism p-6 rounded-xl shadow-lg fade-in-up delay-100">
                         <h3 class="font-bold text-xl text-gray-900 mb-2 text-center">核心結論</h3>
-                        <p class="text-center text-lg text-gray-700 leading-relaxed">系統根本問題為「<strong class="text-blue-800">設計壽命預期</strong>」與「<strong class="text-blue-800">實際維護級別</strong>」的巨大落差，所導致的 <strong class="text-red-600">加速性系統老化 (Accelerated System Aging)</strong>。</p>
+                        <p class="text-center text-lg text-gray-700 leading-relaxed">倉儲系統震盪僅是表象，深層病因是冷鏈環境引發的關鍵零組件加速損耗，以及未能與之匹配的維護策略。此問題若被忽視，極可能引發無預警的重大停機。</p>
                     </div>
                     <div class="glassmorphism p-6 rounded-xl shadow-lg fade-in-up delay-200">
                         <h3 class="font-bold text-xl text-gray-900 mb-3 text-center">策略性建議</h3>
-                        <div class="text-left">
-                           <h4 class="font-semibold text-gray-800">行動方案：</h4>
-                           <p class="text-gray-600">將分析報告與佐證數據，直接提交給企業的**風險控制部門**。</p>
-                           <h4 class="font-semibold text-gray-800 mt-3">動機：</h4>
-                           <p class="text-gray-600">利用風控單位的**中立性與權威性**，繞過潛在阻力，確保及時應對。</p>
-                       </div>
+                        <p class="text-gray-700">應將此份分析報告，連同所有佐證數據，正式提交給企業的**風險控制部門**。利用其**中立性與權威性**，繞過潛在部門阻力，啟動正式風險評估，並推動跨部門協作，制定全面解決方案。</p>
                     </div>
                 </div>
             </div>
              <div class="w-full lg:w-1/2 mt-8 lg:mt-0 flex items-center justify-center fade-in-up delay-300">
-                <img src="supervisor-chat.png" alt="與主管對話紀錄" class="rounded-lg shadow-2xl object-contain max-h-[480px]">
+                <img src="supervisor-chat.png" alt="supervisor-chat.png" class="rounded-lg shadow-2xl object-contain max-h-[480px]">
             </div>
         </div>
         
@@ -266,5 +225,3 @@
     </script>
 </body>
 </html>
-
-
