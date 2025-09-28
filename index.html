@@ -44,45 +44,7 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
-        /* --- Styles for Printing to PDF --- */
-        @media print {
-            body {
-                background-color: #ffffff !important;
-                -webkit-print-color-adjust: exact; /* Ensures background colors print */
-                print-color-adjust: exact;
-            }
-            #print-instructions, .absolute.bottom-4 {
-                display: none !important;
-            }
-            #presentation-container {
-                width: 100%;
-                max-width: none;
-                height: auto;
-                aspect-ratio: auto;
-                box-shadow: none;
-                border-radius: 0;
-                overflow: visible;
-            }
-            .slide {
-                display: flex !important;
-                opacity: 1 !important;
-                width: 100%;
-                height: 100vh;
-                page-break-after: always;
-                overflow: hidden;
-                box-sizing: border-box;
-            }
-            .slide:last-of-type {
-                page-break-after: avoid;
-            }
-            .fade-in-up {
-                opacity: 1;
-                transform: translateY(0);
-                animation: none;
-            }
-        }
-    </style>
-</head>
+
     <div class="w-full max-w-5xl aspect-[16/9] shadow-2xl rounded-2xl overflow-hidden relative bg-slate-800" id="presentation-container">
         
         <!-- Slide 1: Cover Page -->
@@ -302,5 +264,6 @@
     </script>
 </body>
 </html>
+
 
 
