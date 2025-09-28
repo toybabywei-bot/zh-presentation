@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大型自動化冷鏈倉儲之預防性維護與系統老化分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #f0f2f5;
+            color: #1a202c;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            min-height: 500px;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-in-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* --- Styles for Printing to PDF --- */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                -webkit-print-color-adjust: exact; /* Ensures background colors print */
+                print-color-adjust: exact;
+            }
+            #print-instructions, .absolute.bottom-4 {
+                display: none !important;
+            }
+            #presentation-container {
+                width: 100%;
+                max-width: none;
+                height: auto;
+                aspect-ratio: auto;
+                box-shadow: none;
+                border-radius: 0;
+                overflow: visible;
+            }
+            .slide {
+                display: flex !important;
+                opacity: 1 !important;
+                width: 100%;
+                height: 100vh;
+                page-break-after: always;
+                overflow: hidden;
+                box-sizing: border-box;
+            }
+            .slide:last-of-type {
+                page-break-after: avoid;
+            }
+            .fade-in-up {
+                opacity: 1;
+                transform: translateY(0);
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
+
+    <div id="print-instructions" class="print:hidden w-full max-w-5xl mb-4 p-4 bg-blue-100 border border-blue-300 text-blue-800 rounded-lg shadow">
+        <h3 class="font-bold text-lg">✅ 如何讓簡報與圖片正確顯示：</h3>
+        <ol class="list-decimal list-inside mt-2 space-y-1">
+            <li><strong>建立資料夾</strong>：在您的電腦上建立一個新資料夾，例如命名為「專案簡報」。</li>
+            <li><strong>儲存主檔案</strong>：將這份 HTML 程式碼儲存到該資料夾中，檔名為 `index.html`。</li>
+            <li><strong>儲存圖片</strong>：將您上傳的三張高清圖片，依照以下對應關係，儲存到**同一個資料夾**中：
+                <ul class="list-disc list-inside ml-6 mt-1 bg-blue-50 p-2 rounded">
+                    <li>警報紀錄截圖 -> 檔名設為 `alarm-record.png`</li>
+                    <li>內部郵件截圖 -> 檔名設為 `internal-email.png`</li>
+                    <li>與主管對話截圖 -> 檔名設為 `supervisor-chat.png`</li>
+                </ul>
+            </li>
+            <li><strong>開啟簡報</strong>：用瀏覽器打開資料夾中的 `index.html` 檔案即可。</li>
+        </ol>
+    </div>
+
+    <div class="w-full max-w-5xl aspect-[16/9] shadow-2xl rounded-2xl overflow-hidden relative bg-slate-800" id="presentation-container">
+        
+        <!-- Slide 1: Cover Page -->
+        <div class="slide active flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-900 via-slate-800 to-blue-900 text-white" data-slide="1">
+            <div class="fade-in-up">
+                <h1 class="text-4xl md:text-6xl font-bold leading-tight tracking-tight">大型自動化冷鏈倉儲之<br>預防性維護與系統老化分析</h1>
+                <p class="mt-6 text-xl md:text-2xl text-blue-300 delay-200 fade-in-up">專案分析報告</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Background & Objective -->
+        <div class="slide flex-col justify-center p-12 bg-white" data-slide="2">
+            <h2 class="text-4xl font-bold text-blue-800 mb-8 border-l-4 border-blue-500 pl-4 fade-in-up">背景與目標</h2>
+            <div class="space-y-6 text-lg">
+                <div class="flex items-start fade-in-up delay-100">
+                    <svg class="w-8 h-8 text-blue-500 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800">專案起因</h3>
+                        <p class="text-gray-600">為提升廠內自動化倉儲系統的整體運作產能。</p>
+                    </div>
+                </div>
+                <div class="flex items-start fade-in-up delay-200">
+                    <svg class="w-8 h-8 text-blue-500 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800">初始目標</h3>
+                        <p class="text-gray-600">解決儲運箱高速移動設備 (Crane) 的過度震盪問題。</p>
+                    </div>
+                </div>
+                <div class="flex items-start fade-in-up delay-300">
+                     <svg class="w-8 h-8 text-blue-500 mr-4 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800">意識轉變</h3>
+                        <p class="text-gray-600">初步研究發現，單純透過參數壓制效能來換取穩定性，並非最佳解方，可能掩蓋了更深層的系統性問題。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3: Discovery & Challenge -->
+        <div class="slide flex-col justify-center p-12 bg-gray-50" data-slide="3">
+            <div class="w-full lg:w-2/3">
+                <h2 class="text-4xl font-bold text-indigo-800 mb-8 border-l-4 border-indigo-500 pl-4 fade-in-up">發現與挑戰</h2>
+                <div class="space-y-6 text-lg">
+                    <div class="fade-in-up delay-100 bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl text-gray-800">核心挑戰</h3>
+                        <p class="text-gray-600">設備商將 PLC 核心程式碼鎖定，無法進行直接的程式碼分析與優化。</p>
+                    </div>
+                    <div class="fade-in-up delay-200 bg-white p-6 rounded-lg shadow">
+                        <h3 class="font-bold text-xl text-gray-800">初步發現</h3>
+                        <p class="text-gray-600">系統採用兩組內建複雜運動曲線 (S-Curve) 的高性能變頻器，顯示設計之初已將 <strong class="text-indigo-600">抗震穩定性</strong> 作為最高優先級。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Analysis & Methodology -->
+        <div class="slide flex-col justify-center p-12 bg-white" data-slide="4">
+            <h2 class="text-4xl font-bold text-teal-800 mb-8 border-l-4 border-teal-500 pl-4 fade-in-up">分析與方法</h2>
+            <div class="grid md:grid-cols-2 gap-8 text-lg">
+                <div class="bg-teal-50 p-6 rounded-lg shadow-sm fade-in-up delay-100">
+                    <h3 class="font-bold text-xl text-teal-700 mb-2">逆向工程與類比分析</h3>
+                    <p class="text-gray-600">透過逆向思維推斷 S 曲線的應用邏輯，並將運動波形與「<strong class="text-teal-600">音樂節拍</strong>」類比，成功驗證其抑制震盪的作用。</p>
+                </div>
+                <div class="bg-orange-50 p-6 rounded-lg shadow-sm fade-in-up delay-200">
+                    <h3 class="font-bold text-xl text-orange-700 mb-2">矛盾點與調查轉向</h3>
+                    <p class="text-gray-600">「短距離降速優化」方案與提升產能總目標矛盾，使調查方向從「程式優化」轉向「<strong class="text-orange-600">機械老化</strong>」。</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 5: Cross-Domain Investigation -->
+        <div class="slide flex-col justify-center p-12 bg-gray-50" data-slide="5">
+            <h2 class="text-4xl font-bold text-purple-800 mb-8 border-l-4 border-purple-500 pl-4 fade-in-up">跨領域整合調查</h2>
+            <div class="space-y-6 text-lg">
+                 <div class="flex items-start bg-white p-6 rounded-lg shadow-md fade-in-up delay-100">
+                    <svg class="w-10 h-10 text-purple-500 mr-5 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800">物理觀察</h3>
+                        <p class="text-gray-600">將視角擴大至整體鋼構，發現結構在設備高速運行下有 <strong class="text-purple-600">顯著搖晃</strong>。</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-white p-6 rounded-lg shadow-md fade-in-up delay-200">
+                    <svg class="w-10 h-10 text-purple-500 mr-5 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V7a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800">數據挖掘與交叉比對 (三週數據)</h3>
+                        <ul class="list-disc list-inside text-gray-600 mt-2">
+                            <li><strong class="text-gray-700">證實 1：</strong>為安全考量，系統避免了三台設備同時全速運行。</li>
+                            <li><strong class="text-gray-700">證實 2：</strong>意外發現三台設備 <strong class="text-purple-600">作業量嚴重不均</strong>，揭示了 WMS 儲位規劃的潛在效率問題。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Key Breakthrough -->
+        <div class="slide flex-col lg:flex-row items-center p-12 bg-white" data-slide="6">
+            <div class="w-full lg:w-1/2 pr-8">
+                <h2 class="text-4xl font-bold text-red-800 mb-6 border-l-4 border-red-500 pl-4 fade-in-up">關鍵突破：數據證據</h2>
+                <div class="space-y-4">
+                    <p class="text-lg text-gray-700 fade-in-up delay-100">在 WCS 系統中，發現可依設備讀取獨立的 PLC 警報紀錄。</p>
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-lg fade-in-up delay-200">
+                        <h3 class="font-bold text-xl text-red-700 mb-2">致命的物理性警報：</h3>
+                        <ul class="list-disc list-inside text-red-900 space-y-1">
+                            <li>動作未達定位值</li>
+                            <li>昇降纜線斷裂偵測</li>
+                            <li>變頻器故障</li>
+                            <li class="font-bold">伺服馬達異常</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 mt-8 lg:mt-0 grid grid-cols-1 gap-4 fade-in-up delay-300">
+                <img src="alarm-record.png" alt="警報紀錄" class="rounded-lg shadow-lg w-full h-auto object-cover">
+                <img src="internal-email.png" alt="內部溝通郵件" class="rounded-lg shadow-lg w-full h-auto object-cover">
+            </div>
+        </div>
+
+        <!-- Slide 7: Conclusion & Recommendation -->
+        <div class="slide flex-col lg:flex-row items-center justify-center p-12 bg-gradient-to-br from-blue-50 to-indigo-100 gap-8" data-slide="7">
+            <div class="w-full lg:w-1/2">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center lg:text-left fade-in-up">結論與建議</h2>
+                <div class="w-full max-w-3xl space-y-6">
+                    <div class="glassmorphism p-6 rounded-xl shadow-lg fade-in-up delay-100">
+                        <h3 class="font-bold text-xl text-gray-900 mb-2 text-center">核心結論</h3>
+                        <p class="text-center text-lg text-gray-700 leading-relaxed">系統根本問題為「<strong class="text-blue-800">設計壽命預期</strong>」與「<strong class="text-blue-800">實際維護級別</strong>」的巨大落差，所導致的 <strong class="text-red-600">加速性系統老化 (Accelerated System Aging)</strong>。</p>
+                    </div>
+                    <div class="glassmorphism p-6 rounded-xl shadow-lg fade-in-up delay-200">
+                        <h3 class="font-bold text-xl text-gray-900 mb-3 text-center">策略性建議</h3>
+                        <div class="text-left">
+                           <h4 class="font-semibold text-gray-800">行動方案：</h4>
+                           <p class="text-gray-600">將分析報告與佐證數據，直接提交給企業的**風險控制部門**。</p>
+                           <h4 class="font-semibold text-gray-800 mt-3">動機：</h4>
+                           <p class="text-gray-600">利用風控單位的**中立性與權威性**，繞過潛在阻力，確保及時應對。</p>
+                       </div>
+                    </div>
+                </div>
+            </div>
+             <div class="w-full lg:w-1/2 mt-8 lg:mt-0 flex items-center justify-center fade-in-up delay-300">
+                <img src="supervisor-chat.png" alt="與主管對話紀錄" class="rounded-lg shadow-2xl object-contain max-h-[480px]">
+            </div>
+        </div>
+        
+        <!-- Slide 8: Q&A -->
+        <div class="slide flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-900 via-slate-800 to-blue-900 text-white" data-slide="8">
+            <div class="fade-in-up">
+                <h2 class="text-7xl font-bold">Q&A</h2>
+                <p class="mt-6 text-2xl text-blue-300 delay-200 fade-in-up">感謝聆聽</p>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center space-x-4 z-10">
+            <button id="prevBtn" class="bg-white/20 text-white p-2 rounded-full hover:bg-white/40 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+            </button>
+            <span id="slideCounter" class="text-white text-lg font-medium">1 / 8</span>
+            <button id="nextBtn" class="bg-white/20 text-white p-2 rounded-full hover:bg-white/40 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    const elementsToAnimate = slide.querySelectorAll('.fade-in-up');
+                    if (i === index) {
+                        slide.classList.add('active');
+                        elementsToAnimate.forEach(el => {
+                            el.style.animation = 'none';
+                            el.offsetHeight;
+                            el.style.animation = '';
+                        });
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+                slideCounter.textContent = `${index + 1} / ${totalSlides}`;
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === totalSlides - 1;
+            }
+
+            function nextSlide() {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+            showSlide(currentSlide);
+        });
+    </script>
+</body>
+</html>
+
