@@ -30,11 +30,10 @@
         .visible-slide {
             opacity: 1;
         }
-        /* 自定義背景圖片 */
         .cover-bg {
-            /* 提示：您可以建立一張名為 background.jpg 的圖片放在同資料夾來當作背景 */
-            background-image: url('background.jpg');
-            background-color: #020617; /* 如果圖片不存在，顯示深藍色背景 */
+            /* 圖片路徑已修改為相對路徑 */
+            background-image: url('./background.jpg');
+            background-color: #020617;
             background-size: cover;
             background-position: center;
         }
@@ -111,8 +110,8 @@
                 </ul>
             </div>
             <div class="lg:w-1/2 w-full flex justify-center items-center">
-                <!-- 圖片路徑已修改為本地檔案 -->
-                <img src="alarm-record-1.png" alt="WCS 警報紀錄截圖" class="rounded-lg shadow-2xl max-h-[60vh] object-contain border-2 border-slate-700">
+                <!-- 圖片路徑已修改為明確的相對路徑 -->
+                <img src="./alarm-record-1.png" alt="WCS 警報紀錄截圖" class="rounded-lg shadow-2xl max-h-[60vh] object-contain border-2 border-slate-700">
             </div>
         </div>
 
@@ -120,8 +119,8 @@
         <div class="slide hidden-slide w-full h-full flex flex-col justify-center items-center p-8 md:p-16 text-center">
             <h2 class="text-3xl md:text-4xl font-bold text-sky-300 mb-6">證據鏈 II：物理層警報 (The Smoking Gun)</h2>
             <div class="max-w-xs mx-auto mb-6">
-                 <!-- 圖片路徑已修改為本地檔案 -->
-                <img src="alarm-record-2.PNG" alt="伺服馬達警報 54.1" class="rounded-lg shadow-2xl border-4 border-red-500">
+                 <!-- 圖片路徑已修改為明確的相對路徑 -->
+                <img src="./alarm-record-2.PNG" alt="伺服馬達警報 54.1" class="rounded-lg shadow-2xl border-4 border-red-500">
             </div>
             <p class="text-xl text-slate-200 max-w-3xl">最穩定的箱式立庫系統，其核心 Mitsubishi MELSERVO-J4 伺服放大器出現 <span class="font-bold text-2xl text-red-400 bg-red-900/50 px-2 py-1 rounded">警報 54.1</span>，意指「馬達本體或核心感測器異常」，為系統性的硬體耗損提供了無法辯駁的證據。</p>
         </div>
@@ -220,3 +219,4 @@
     </script>
 </body>
 </html>
+
