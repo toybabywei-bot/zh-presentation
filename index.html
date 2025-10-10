@@ -3,228 +3,461 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自動化倉儲系統老化分析專案簡報</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>從反應式維修到預防性治理</title>
     <style>
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        :root {
+            --primary-bg: #f8f9fa;
+            --text-color: #212529;
+            --header-color: #003366;
+            --accent-color: #005a9e;
+            --border-color: #dee2e6;
+            --slide-padding: 5vmin;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+        .presentation-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
         }
         .slide {
-            transition: opacity 0.6s ease-in-out;
-        }
-        .hidden-slide {
-            opacity: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            padding: var(--slide-padding);
+            text-align: center;
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
         }
-        .visible-slide {
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            z-index: 1;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 100%;
+        }
+        h1, h2, h3 {
+            color: var(--header-color);
+            margin-bottom: 0.5em;
+        }
+        h1 { font-size: calc(2.5rem + 1.5vw); }
+        h2 { font-size: calc(1.8rem + 1vw); }
+        h3 { font-size: calc(1.2rem + 0.8vw); }
+        p, li {
+            font-size: calc(1rem + 0.5vw);
+            line-height: 1.6;
+            text-align: left;
+        }
+        ul {
+            list-style-position: inside;
+            text-align: left;
+            padding-left: 0;
+        }
+        .slide-footer {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background-color: rgba(0, 51, 102, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 50%;
+            opacity: 0.3;
+            transition: opacity 0.3s;
+        }
+        .presentation-container:hover .nav-button {
             opacity: 1;
         }
-        .cover-bg {
-            background-image: url('./background.jpg');
-            background-color: #020617;
-            background-size: cover;
-            background-position: center;
+        #prevBtn { left: 20px; }
+        #nextBtn { right: 20px; }
+
+        /* Specific Slide Styles */
+        .title-slide h1 { margin-bottom: 0.2em; }
+        .title-slide h3 { color: var(--accent-color); font-weight: 400; }
+        .title-slide p { text-align: center; margin-top: 2em; font-size: calc(1.2rem + 0.5vw); }
+
+        .two-column {
+            display: flex;
+            width: 100%;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+        .column {
+            flex: 1;
+        }
+        .column img {
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .timeline {
+            list-style-type: none;
+            padding-left: 0;
+            position: relative;
+        }
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--border-color);
+        }
+        .timeline-item {
+            margin-bottom: 2rem;
+            position: relative;
+            padding-left: 50px;
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            border: 4px solid var(--primary-bg);
+        }
+        .timeline-item p, .timeline-item strong {
+            font-size: calc(0.9rem + 0.4vw);
+            text-align: left;
+        }
+        .timeline-item strong {
+            display: block;
+            font-weight: bold;
+            color: var(--header-color);
+        }
+
+        .centered-image-slide img {
+             max-width: 80%;
+             max-height: 50vh;
+             width: auto;
+             height: auto;
+             margin-bottom: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 1em;
+            text-align: left;
+            font-size: calc(0.8rem + 0.3vw);
+            vertical-align: top;
+        }
+        th {
+            background-color: #e9ecef;
+            color: var(--header-color);
+        }
+
+        .three-columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            text-align: left;
+        }
+        .three-columns h3 {
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+        }
+         .three-columns p, .three-columns ul { font-size: calc(0.9rem + 0.4vw); }
+         .three-columns li { margin-bottom: 0.5rem; }
+
+        .final-slide h2 {
+            font-size: calc(2rem + 1.2vw);
+            color: var(--accent-color);
+            margin-bottom: 1em;
         }
     </style>
 </head>
-<body class="bg-slate-900 text-white overflow-hidden">
+<body>
 
-    <!-- 投影片容器 -->
-    <main id="presentation-container" class="relative w-full h-screen">
-
-        <!-- Slide 1: 封面頁 -->
-        <div class="slide visible-slide w-full h-full flex flex-col justify-center items-center text-center p-8 cover-bg">
-            <div class="bg-black bg-opacity-50 p-10 rounded-xl backdrop-blur-sm">
-                <h1 class="text-4xl md:text-5xl font-bold text-sky-300 leading-tight">大型自動化冷鏈倉儲之預防性維護<br>& 系統老化根本原因分析 (RCA)</h1>
-                <p class="mt-8 text-xl text-slate-200">報告人：李哲維</p>
-                <p class="mt-2 text-lg text-slate-400">報告日期：2025.09.28</p>
+    <div class="presentation-container">
+        <section class="slide title-slide active">
+            <div class="slide-content">
+                <h1>從反應式維修到預防性治理</h1>
+                <h3>自動化倉儲系統之組織性失能診斷與價值重塑策略</h3>
+                <p>報告人： 李哲維</p>
+                <p>2025年10月</p>
             </div>
-        </div>
+        </section>
 
-        <!-- Slide 2: 專案總覽與初期症狀 -->
-        <div class="slide hidden-slide w-full h-full flex flex-col justify-center items-center p-8 md:p-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-sky-300 mb-12">專案總覽與初期症狀</h2>
-            <div class="w-full max-w-5xl grid md:grid-cols-3 gap-8 text-center">
-                <div class="bg-slate-800 p-6 rounded-lg">
-                    <svg class="w-16 h-16 mx-auto mb-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    <h3 class="text-xl font-semibold mb-2">初始目標</h3>
-                    <p class="text-slate-300">提升整體產能，並解決 Crane 過度震盪問題。</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-lg">
-                    <svg class="w-16 h-16 mx-auto mb-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <h3 class="text-xl font-semibold mb-2">觀察症狀</h3>
-                    <p class="text-slate-300">動力滾筒頻繁「未達下個光電感測器就停止」，控制卡延時參數已達最大值。</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-lg">
-                     <svg class="w-16 h-16 mx-auto mb-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                    <h3 class="text-xl font-semibold mb-2">核心洞見</h3>
-                    <p class="text-slate-300">意識到「治標不治本」的調整，正掩蓋著深層的系統性風險。</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Slide 3: 核心挑戰與分析方法 -->
-        <div class="slide hidden-slide w-full h-full flex flex-col justify-center items-center p-8 md:p-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-sky-300 mb-6">核心挑戰：設備商鎖定 PLC 核心程式碼</h2>
-            
-            <!-- 新增的核心思想 -->
-            <div class="text-center mb-10 border-y-2 border-sky-500 py-4 px-6">
-                <h3 class="text-xl font-semibold text-sky-400">分析核心思想</h3>
-                <p class="text-2xl md:text-3xl text-white font-bold tracking-wider">觀物如實，拒絕碎片認知</p>
-                <p class="text-slate-300 mt-2">堅持不滿足於表面症狀，透過跨領域整合，建立完整的證據鏈以探究問題本質。</p>
-            </div>
-
-            <div class="w-full max-w-6xl grid md:grid-cols-3 gap-8 text-center">
-                <div class="bg-slate-800 p-6 rounded-lg border border-slate-700">
-                    <div class="text-2xl font-bold text-sky-400 mb-2">1</div>
-                    <h3 class="text-xl font-semibold mb-2">電控層分析</h3>
-                    <p class="text-slate-300">檢查變頻器配置與運動曲線，排除運動控制的「規劃邏輯」問題。</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-lg border border-slate-700">
-                    <div class="text-2xl font-bold text-sky-400 mb-2">2</div>
-                    <h3 class="text-xl font-semibold mb-2">數據層挖掘</h3>
-                    <p class="text-slate-300">深入WCS歷史數據與警報紀錄，尋找異常模式與關鍵證據。</p>
-                </div>
-                <div class="bg-slate-800 p-6 rounded-lg border border-slate-700">
-                    <div class="text-2xl font-bold text-sky-400 mb-2">3</div>
-                    <h3 class="text-xl font-semibold mb-2">物理層驗證</h3>
-                    <p class="text-slate-300">根據數據線索，對實體伺服馬達等硬體進行針對性檢查。</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Slide 4: 證據鏈 I：數據層警報 -->
-        <div class="slide hidden-slide w-full h-full flex flex-col lg:flex-row justify-center items-center p-8 md:p-16 gap-8">
-            <div class="lg:w-1/2 w-full max-w-3xl">
-                <h2 class="text-3xl md:text-4xl font-bold text-sky-300 mb-6">證據鏈 I：數據層警報 (WCS Log)</h2>
-                <ul class="list-disc list-inside text-lg text-slate-200 space-y-4">
-                    <li><span class="font-semibold text-sky-400">高頻率異常：</span>系統於 2025 年 9 月底出現大量且密集的嚴重警報。</li>
-                    <li><span class="font-semibold text-sky-400">直接證據：</span>警報 [M9049]...昇降鋼索磨耗/拉伸` 直接證實了物理磨損。</li>
-                    <li><span class="font-semibold text-sky-400">間接證據：</span>多筆「行走INV未統異常」紀錄，顯示變頻器回饋系統不穩定。</li>
-                    <li><span class="font-semibold text-red-400">風險升級：</span>數據驗證了郵件中提及的「昇降繩索斷裂檢知」的更高風險警報。</li>
+        <section class="slide">
+            <div class="slide-content">
+                <h2>執行摘要</h2>
+                <ul>
+                    <li><strong>核心問題</strong><br>一座大型自動化倉儲的營運危機，其根源並非單純的技術老化，而是深層次的<b>組織性失能</b>。</li>
+                    <li><strong>診斷方法</strong><br>透過對 WCS 數據、設備警報與歷史事件的交叉驗證，建立了一個從「單點問題」洞察到「系統性風險」的診斷框架。</li>
+                    <li><strong>核心結論</strong><br>組織的「反應式維修」文化，導致可預防的風險持續擴大，最終演變為實質性的營運衝擊與法規遵循危機。</li>
+                    <li><strong>解決方案</strong><br>提出一套「預防性治理」的行動藍圖，旨在將維護部門從成本中心，<b>重塑</b>為價值創造中心。</li>
                 </ul>
             </div>
-            <div class="lg:w-1/2 w-full flex justify-center items-center">
-                <img src="./alarm-record-1.png" alt="WCS 警報紀錄截圖" class="rounded-lg shadow-2xl max-h-[60vh] object-contain border-2 border-slate-700">
-            </div>
-        </div>
+        </section>
 
-        <!-- Slide 5: 證據鏈 II：物理層警報 -->
-        <div class="slide hidden-slide w-full h-full flex flex-col justify-center items-center p-8 md:p-16 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-sky-300 mb-6">證據鏈 II：物理層警報 (The Smoking Gun)</h2>
-            <div class="max-w-xs mx-auto mb-6">
-                <img src="./alarm-record-2.PNG" alt="伺服馬達警報 54.1" class="rounded-lg shadow-2xl border-4 border-red-500">
+        <section class="slide">
+            <div class="slide-content">
+                <h2>一場可預見的危機：關鍵事件時間軸</h2>
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <strong>8月下旬</strong>
+                        <p>初步優化受阻，轉向實地觀察。維修行動因「年底改電控」等理由被推遲。</p>
+                    </li>
+                    <li class="timeline-item">
+                        <strong>9月23日</strong>
+                        <p><b>首次書面預警。</b> 透過 E-mail 提出初步數據警示與老化風險。</p>
+                    </li>
+                    <li class="timeline-item">
+                        <strong>9月24日</strong>
+                        <p><b>關鍵因素出現。</b> 箱式立庫伺服器馬達發出「54.1」異常警報，系統性風險獲得實證。</p>
+                    </li>
+                     <li class="timeline-item">
+                        <strong>9月29日</strong>
+                        <p><b>策略性建議遭漠視。</b> 向管理層提出「棄車保帥」的預防性策略，未獲採納。</p>
+                    </li>
+                    <li class="timeline-item">
+                        <strong>10月4日 - 6日</strong>
+                        <p><b>危機全面爆發。</b> Crane 設備出現連鎖性、災難性的故障與警報。</p>
+                    </li>
+                </ul>
             </div>
-            <p class="text-xl text-slate-200 max-w-3xl">最穩定的箱式立庫系統，其核心 Mitsubishi MELSERVO-J4 伺服放大器出現 <span class="font-bold text-2xl text-red-400 bg-red-900/50 px-2 py-1 rounded">警報 54.1</span>，意指「馬達本體或核心感測器異常」，為系統性的硬體耗損提供了無法辯駁的證據。</p>
-        </div>
+        </section>
 
-        <!-- Slide 6: 根本原因分析 -->
-        <div class="slide hidden-slide w-full h-full flex flex-col justify-center items-center p-8 md:p-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-sky-300 mb-12">根本原因分析 (Root Cause Analysis)</h2>
-            <div class="w-full max-w-4xl space-y-4 text-center">
-                <div class="bg-slate-800 p-4 rounded-lg text-lg">WCS 警報 / 伺服器故障 / 現場觀察</div>
-                <div class="flex justify-center"><svg class="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
-                <div class="bg-slate-800 p-4 rounded-lg text-lg font-semibold">核心發現：加速性的系統老化 (Accelerated System Aging)</div>
-                <div class="flex justify-center"><svg class="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
-                <div class="bg-slate-800 p-4 rounded-lg text-lg">根本原因：設廠至今設備從未規畫任何「保養檢護作業」</div>
-                 <div class="flex justify-center"><svg class="w-8 h-8 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg></div>
-                <div class="bg-red-900/50 border border-red-500 text-red-300 p-6 rounded-lg text-xl font-bold">技術細節：低溫導致「軸承潤滑油顆粒化，磨損率加倍」</div>
-            </div>
-        </div>
-
-        <!-- Slide 7: 結論與策略性建議 -->
-        <div class="slide hidden-slide w-full h-full flex flex-col justify-center items-center p-8 md:p-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-sky-300 mb-12">結論與策略性建議</h2>
-            <div class="w-full max-w-5xl grid md:grid-cols-2 gap-12">
-                <div class="text-center md:text-left">
-                    <h3 class="text-2xl font-semibold mb-4 text-red-400 flex items-center justify-center md:justify-start">
-                        <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        結論
-                    </h3>
-                    <ul class="list-disc list-inside text-lg text-slate-200 space-y-3">
-                        <li>系統已進入不可逆的加速衰退期。</li>
-                        <li>單點、反應式的維修已無實質意義。</li>
-                    </ul>
+        <section class="slide">
+            <div class="slide-content two-column">
+                <div class="column">
+                    <img src="https://storage.googleapis.com/static.a-b-c.io/uploaded/image.png-523473b2-ae32-4b59-898c-00c51ed76565" alt="WCS 警報紀錄">
                 </div>
-                <div class="text-center md:text-left">
-                    <h3 class="text-2xl font-semibold mb-4 text-green-400 flex items-center justify-center md:justify-start">
-                        <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                        策略性建議
-                    </h3>
-                    <ul class="list-disc list-inside text-lg text-slate-200 space-y-3">
-                        <li>標準維修流程緩不濟急，且會被驗收環節卡關。</li>
-                        <li>應將此份包含完整證據的分析報告，直接提交至企業的**風險控制部門**。</li>
+                <div class="column">
+                    <h2>證據一：失控的警報</h2>
+                    <h3>(來自 WCS 的呼救)</h3>
+                    <ul>
+                        <li><b>海量的前兆</b><br>系統長期頻繁出現「昇降鬆緊偵知」、「INV 系統異常」等警報。</li>
+                        <li><b>被忽視的數據</b><br>早在 9 月 23 日的郵件中，就已明確指出 Crane1 的異常與鋼索鬆弛檢知的問題。</li>
+                        <li><b>結論</b><br>數據早已發出無數次呼救，但組織缺乏解讀與回應這些數據的機制與文化。</li>
                     </ul>
                 </div>
             </div>
+        </section>
+
+        <section class="slide centered-image-slide">
+             <div class="slide-content">
+                <img src="https://storage.googleapis.com/static.a-b-c.io/uploaded/image.png-f5b4fdeb-7345-4c6f-afef-bde0c88e3144" alt="伺服器馬達異常 54.1">
+                <h2>這不是雜訊，這是系統性崩壞的「第一槍」</h2>
+                <p style="text-align:center;">2025年9月24日，作為系統中最精密、最穩定的組件之一的伺服器馬達，出現了「54.1 馬達運轉異常」的嚴重警報，代表不可逆的硬體損壞。<br><b>從這一刻起，風險已不再是「可能性」，而是「正在發生」。</b></p>
+            </div>
+        </section>
+
+        <section class="slide">
+            <div class="slide-content">
+                 <h2>證據三：被否決的專業</h2>
+                 <h3>(來自管理層的阻力)</h3>
+                 <table>
+                     <thead>
+                         <tr>
+                             <th>您的專業方案 (9/29)</th>
+                             <th>體制的回應 (9/29)</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td>
+                                <p>「承受小部分的錯位失能...換取兩台Crane全面的保養檢修...」</p>
+                                <img src="https://storage.googleapis.com/static.a-b-c.io/uploaded/image.png-6e27c9ba-6901-4626-a264-70c665066713" alt="棄車保帥建議">
+                                <p><b>思維：</b>承認風險、管理風險、用小代價避免大災難的策略性思考。</p>
+                            </td>
+                             <td>
+                                <p>「有些人就是在那個職位做自己該做的事。」</p>
+                                <p>「因為你有可能增加他們要做的事情。」</p>
+                                 <img src="https://storage.googleapis.com/static.a-b-c.io/uploaded/image.png-bd2c59c3-41d8-419f-b0d9-b3f149b4013e" alt="經理的回應">
+                                <p><b>思維：</b>維持現狀、避免改變、將專業建議視為「麻煩」的官僚主義。</p>
+                            </td>
+                         </tr>
+                     </tbody>
+                 </table>
+            </div>
+        </section>
+
+        <section class="slide">
+            <div class="slide-content">
+                 <h2>最終的審判：三日內的連鎖潰敗</h2>
+                 <ul>
+                    <li><b>10/4：違法操作</b><br>Crane 2 出現 `KSS122005` 安全警示後，遭非專業人員強制重啟，違反《職安設施規則》。</li>
+                    <li><b>10/5：物理斷裂</b><br>Crane 2 升降繩索斷裂，證明老化問題已達物理極限。<b>本人提出的對其餘 Crane 進行預防性檢修的建議，遭到否決。</b></li>
+                    <li><b>10/6：風險擴散</b><br>Crane 1 在一天內三次觸發與 Crane 2 同樣的「昇降鬆緊偵知」警報，證明危機已全面擴散，管理層的否決是完全錯誤的決策。</li>
+                 </ul>
+            </div>
+        </section>
+
+        <section class="slide">
+            <div class="slide-content three-columns">
+                <div class="column">
+                    <h3>文化失能</h3>
+                    <p>「經驗主義」凌駕於「數據科學」，系統性排斥專業預警。</p>
+                </div>
+                <div class="column">
+                    <h3>流程失能</h3>
+                    <p>專業決策權被架空，風險管理流程完全失效。</p>
+                </div>
+                <div class="column">
+                    <h3>法規失能</h3>
+                    <p>公然漠視《職業安全衛生設施規則》，將組織置於高度法律與工安風險之中。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide">
+            <div class="slide-content">
+                <h2>改革藍圖：從止血到免疫的三階段價值重塑</h2>
+                <div class="three-columns">
+                    <div class="column">
+                        <h3>第一階段：緊急止血</h3>
+                        <ul>
+                            <li>啟動獨立調查</li>
+                            <li>執行全面安檢</li>
+                            <li>強化法規執行</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>第二階段：重建免疫</h3>
+                        <ul>
+                            <li>導入預防性維護系統 (PMS)</li>
+                            <li>建立專業認證制度</li>
+                        </ul>
+                    </div>
+                    <div class="column">
+                        <h3>第三階段：文化重塑</h3>
+                        <ul>
+                            <li>重構專業決策權</li>
+                            <li>建立數據驅動的決策文化</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="slide">
+            <div class="slide-content">
+                 <h2>總結：一個選擇，兩種未來</h2>
+                 <table>
+                     <thead>
+                         <tr>
+                             <th>維持現狀 (反應式維修)</th>
+                             <th>擁抱變革 (預防性治理)</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr>
+                             <td>📉 持續的非計畫性停機</td>
+                             <td>📈 穩定、可預測的營運</td>
+                         </tr>
+                         <tr>
+                             <td>💸 不斷升高的維運成本</td>
+                             <td>💰 最佳化的資產生命週期</td>
+                         </tr>
+                          <tr>
+                             <td>⚖️ 無法規避的法律風險</td>
+                             <td>✅ 安全的合規工作環境</td>
+                         </tr>
+                          <tr>
+                             <td>🚶‍♂️ 專業人才的流失</td>
+                             <td>🤝 受尊重的專業團隊</td>
+                         </tr>
+                     </tbody>
+                 </table>
+            </div>
+        </section>
+
+        <section class="slide final-slide">
+             <div class="slide-content">
+                <h2>觀物如實，力證萬物皆可數</h2>
+                <h3>報告人： 李哲維</h3>
+                <p style="text-align: center;">[你的聯絡方式]</p>
+            </div>
+        </section>
+
+        <button id="prevBtn" class="nav-button">&lt;</button>
+        <button id="nextBtn" class="nav-button">&gt;</button>
+        <div class="slide-footer">
+            <span id="currentSlideNum">1</span> / <span id="totalSlideNum">11</span>
         </div>
-
-        <!-- Slide 8: Q&A -->
-        <div class="slide hidden-slide w-full h-full flex flex-col justify-center items-center p-8 text-center">
-            <h2 class="text-6xl font-bold text-sky-300">Q & A</h2>
-            <p class="mt-8 text-2xl text-slate-300">敬請指教</p>
-        </div>
-
-    </main>
-
-    <!-- 導航按鈕 -->
-    <div class="fixed bottom-6 right-6 flex space-x-3">
-        <button id="prev-btn" class="bg-sky-500 hover:bg-sky-600 text-white font-bold p-3 rounded-full shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-        </button>
-        <button id="next-btn" class="bg-sky-500 hover:bg-sky-600 text-white font-bold p-3 rounded-full shadow-lg transition-all duration-300">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-        </button>
     </div>
 
     <script>
         const slides = document.querySelectorAll('.slide');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const currentSlideNum = document.getElementById('currentSlideNum');
+        const totalSlideNum = document.getElementById('totalSlideNum');
+
         let currentSlide = 0;
 
         function showSlide(n) {
-            slides[currentSlide].classList.add('hidden-slide');
-            slides[currentSlide].classList.remove('visible-slide');
+            slides[currentSlide].classList.remove('active');
             currentSlide = (n + slides.length) % slides.length;
-            slides[currentSlide].classList.remove('hidden-slide');
-            slides[currentSlide].classList.add('visible-slide');
-            updateButtons();
+            slides[currentSlide].classList.add('active');
+            updateSlideCounter();
         }
 
-        function updateButtons() {
-            prevBtn.disabled = currentSlide === 0;
-            nextBtn.disabled = currentSlide === slides.length - 1;
+        function updateSlideCounter() {
+            currentSlideNum.textContent = currentSlide + 1;
         }
 
-        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
-        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+        prevBtn.addEventListener('click', () => {
+            showSlide(currentSlide - 1);
+        });
 
+        nextBtn.addEventListener('click', () => {
+            showSlide(currentSlide + 1);
+        });
+        
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) {
+            if (e.key === 'ArrowRight') {
                 showSlide(currentSlide + 1);
-            } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+            } else if (e.key === 'ArrowLeft') {
                 showSlide(currentSlide - 1);
             }
         });
 
-        showSlide(0);
+        totalSlideNum.textContent = slides.length;
+        updateSlideCounter();
     </script>
 </body>
 </html>
-
-
-
 
 
